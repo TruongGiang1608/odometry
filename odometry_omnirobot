@@ -4,6 +4,7 @@
 #include <std_msgs/Float64.h>
 #include <sensor_msgs/JointState.h>
 
+double V1, V2, V3;
 void velCallback(const sensor_msgs::JointState& msg)
 {
   V1 = msg.velocity[0];
@@ -12,15 +13,15 @@ void velCallback(const sensor_msgs::JointState& msg)
 }
 int main(int argc, char **argv)
 {
-  ros::init(argc,argv,"odometry_publisher";
+  ros::init(argc,argv,"odometry_publisher");
   ros::NodeHandle n;
   ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("odom",50);
   tf::TransformBroadcaster odom_broadcaster;
-  ros::Subscriber vel_sub = n.subscribe("....",50,velCallback);
+  ros::Subscriber vel_sub = n.subscribe("wheels_speed",50,velCallback);
 
   const double PI = acos(-1.0);
   const double R = 0.0625;
-  const double L = ...;
+  const double L = 0.28;
 
   double x = 0.0;
   double y = 0.0;
@@ -33,7 +34,7 @@ int main(int argc, char **argv)
   ros::Rate rate(10);
 while(n.ok())
 {
-  ros::spinceOnce();
+  ros::spinOnce();
   current_time = ros::Time::now();
   
   double dt = (current_time - last_time).toSec();
@@ -46,7 +47,7 @@ while(n.ok())
   double phi = phi + w*dt;
   geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(phi);
   
-  geometry_msg::TransformStamped odom_trans;
+  geometry_msgs::TransformStamped odom_trans;
   odom_trans.header.stamp = current_time;
   odom_trans.header.frame_id = "odom";
   odom_trans.child_frame_id = "base_footprint"
@@ -67,7 +68,7 @@ while(n.ok())
   odom.pose.pose.position.z = 0.0;
   odom.pose.pose.orientation = odom_quat;
   
-  odom.child_frame_id = "base_link";
+  odom.child_frame_id = "base_footprint";
   odom.twist.twist.linear.x = V_x;
   odom.twist.twist.linear.y = V_y;
   odom.twist.twist.angular.z = w;
@@ -75,6 +76,6 @@ while(n.ok())
   odom_pub.publish(odom);
   last_time = current_time;
   
-  r.sleep();
+  rate.sleep();
   }
 }
