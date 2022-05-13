@@ -3,13 +3,21 @@
 #include <nav_msgs/Odometry.h>
 #include <std_msgs/Float64.h>
 #include <sensor_msgs/JointState.h>
+#include <math.h>
 
-double V1, V2, V3;
-void velCallback(const sensor_msgs::JointState& msg)
+double V1_rd, V2_rd, V3_rd;
+void velCallback1(const std_msgs/Float64MultiArray& msg1)
 {
-  V1 = msg.velocity[0];
-  V2 = msg.velocity[1];
-  V3 = msg.velocity[2];
+  V1_rd = msg1.data[0];
+  V2_rd = msg1.data[1];
+  V3_rd = msg1.data[2];
+}
+double V1_ref, V2_ref, V3_ref;
+void velCallback2(const std_msgs/Float64MultiArray& msg2)
+{
+V1_ref = msg2.data[0];
+V2_ref = msg2.data[1];
+V3_ref = msg2.data[2];
 }
 int main(int argc, char **argv)
 {
@@ -17,7 +25,8 @@ int main(int argc, char **argv)
   ros::NodeHandle n;
   ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("odom",50);
   tf::TransformBroadcaster odom_broadcaster;
-  ros::Subscriber vel_sub = n.subscribe("wheels_speed",50,velCallback);
+  ros::Subscriber vel_sub = n.subscribe("wheels_speed",50,velCallback1);
+  ros::Subscriber vel_sub_ref = n.subscribe("joint_velocity/command",50,velCallback2);
 
   const double PI = acos(-1.0);
   const double R = 0.0625;
@@ -26,21 +35,46 @@ int main(int argc, char **argv)
   double x = 0.0;
   double y = 0.0;
   double phi = 0.0;
-
+  
+  V1_bf = V1_ref;
+  V2_bf = V2_ref;
+  V3_bf = V3_ref;
+  
   ros::Time current_time, last_time;
   current_time = ros::Time::now();
   last_time = ros::Time::now();
-
-  ros::Rate rate(10);
+  
+  cout << " Publishing odometry information over ROS";
+  ros::Rate rate(50);
 while(n.ok())
 {
   ros::spinOnce();
+  if fabs(V1_rd - V1_ref) >= 0.1*V1_rd
+    {
+    V1 = V1_bf;
+    }
+  else {V1 = V1_rd;}
+  if fabs(V2_rd - V2_ref) >= 0.1*V2_rd
+    {
+    V2 = V2_bf;
+    }
+  else {V2 = V2_rd;}
+  if fabs(V3_rd - V3_ref) >= 0.1*V3_rd
+    {
+    V3 = V3_bf;
+    }
+  else {V3 = V3_rd;}
+  
+  V1_bf = V1;
+  V2_bf = V2;
+  V3_bf = V3;
   current_time = ros::Time::now();
   
   double dt = (current_time - last_time).toSec();
   double V_x = -(2/3)*V1*sin(phi) + (sin(phi)-sqrt(3)*cos(phi))*V2/3 + (sin(phi)+sqrt(3)*cos(phi))*V3/3;
   double V_y = (2/3)*V1*cos(phi) - (sqrt(3)*sin(phi)+cos(phi))*V2/3 + (sqrt(3)*sin(phi)-cos(phi))*V3/3;
   double w = (V1 + V2 + V3)/(3*L);
+  
     
   double x = x + V_x*dt;
   double y = y + V_y*dt;
