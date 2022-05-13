@@ -46,7 +46,7 @@ int main(int argc, char **argv)
   current_time = ros::Time::now();
   last_time = ros::Time::now();
   
-  ROS_INFO(" Publishing odometry information over ROS");
+  ROS_INFO("Publishing odometry information over ROS");
   ros::Rate rate(50);
 while(n.ok())
 {
