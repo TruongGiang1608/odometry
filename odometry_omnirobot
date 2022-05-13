@@ -15,9 +15,9 @@ void velCallback1(const std_msgs/Float64MultiArray& msg1)
 double V1_ref, V2_ref, V3_ref;
 void velCallback2(const std_msgs/Float64MultiArray& msg2)
 {
-V1_ref = msg2.data[0];
-V2_ref = msg2.data[1];
-V3_ref = msg2.data[2];
+  V1_ref = msg2.data[0];
+  V2_ref = msg2.data[1];
+  V3_ref = msg2.data[2];
 }
 int main(int argc, char **argv)
 {
@@ -36,9 +36,9 @@ int main(int argc, char **argv)
   double y = 0.0;
   double phi = 0.0;
   
-  V1_bf = V1_ref;
-  V2_bf = V2_ref;
-  V3_bf = V3_ref;
+  double V1_bf = V1_ref;
+  double V2_bf = V2_ref;
+  double V3_bf = V3_ref;
   
   ros::Time current_time, last_time;
   current_time = ros::Time::now();
