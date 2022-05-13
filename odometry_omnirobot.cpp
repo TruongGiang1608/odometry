@@ -8,18 +8,24 @@
 #include <sstream>
 
 double V1_rd, V2_rd, V3_rd;
-void velCallback1(const std_msgs/Float64MultiArray& msg1)
+void velCallback(const std_msgs/Float64MultiArray& msg1)
 {
-  V1_rd = msg1.data[0];
-  V2_rd = msg1.data[1];
-  V3_rd = msg1.data[2];
+  V1_rd = msg.data[0];
+  V2_rd = msg.data[1];
+  V3_rd = msg.data[2];
 }
 double V1_ref, V2_ref, V3_ref;
-void velCallback2(const std_msgs/Float64MultiArray& msg2)
+void velCallback1(const std_msgs/Float64& msg1)
 {
-  V1_ref = msg2.data[0];
-  V2_ref = msg2.data[1];
-  V3_ref = msg2.data[2];
+  V1_ref = msg1.data;
+}
+void velCallback2(const std_msgs/Float64& msg2)
+{
+  V2_ref = msg2.data;
+}
+void velCallback3(const std_msgs/Float64& msg3)
+{
+  V3_ref = msg3.data;
 }
 int main(int argc, char **argv)
 {
@@ -27,8 +33,11 @@ int main(int argc, char **argv)
   ros::NodeHandle n;
   ros::Publisher odom_pub = n.advertise<nav_msgs::Odometry>("odom",1000);
   tf::TransformBroadcaster odom_broadcaster;
-  ros::Subscriber vel_sub = n.subscribe("wheels_speed",1000,velCallback1);
-  ros::Subscriber vel_sub_ref = n.subscribe("joint_velocity/command",1000,velCallback2);
+  ros::Subscriber vel_sub = n.subscribe("wheels_speed",1000,velCallback);
+  
+  ros::Subscriber vel1_sub_ref = n.subscribe(" ",1000,velCallback1);
+  ros::Subscriber vel2_sub_ref = n.subscribe(" ",1000,velCallback2);
+  ros::Subscriber vel3_sub_ref = n.subscribe(" ",1000,velCallback3);
 
   const double PI = acos(-1.0);
   const double R = 0.0625;
@@ -37,10 +46,6 @@ int main(int argc, char **argv)
   double x = 0.0;
   double y = 0.0;
   double phi = 0.0;
-  
-  double V1_bf = V1_ref;
-  double V2_bf = V2_ref;
-  double V3_bf = V3_ref;
   
   ros::Time current_time, last_time;
   current_time = ros::Time::now();
@@ -51,25 +56,22 @@ int main(int argc, char **argv)
 while(n.ok())
 {
   ros::spinOnce();
-  if fabs(V1_rd - V1_ref) >= 0.1*V1_rd
+  if fabs(V1_rd - V1_ref) <= 0.01
     {
-    V1 = V1_bf;
+    V1 = V1_ref;
     }
   else {V1 = V1_rd;}
-  if fabs(V2_rd - V2_ref) >= 0.1*V2_rd
+  if fabs(V2_rd - V2_ref) <= 0.01
     {
-    V2 = V2_bf;
+    V2 = V2_ref;
     }
   else {V2 = V2_rd;}
-  if fabs(V3_rd - V3_ref) >= 0.1*V3_rd
+  if fabs(V3_rd - V3_ref) <= 0.01
     {
-    V3 = V3_bf;
+    V3 = V3_ref;
     }
   else {V3 = V3_rd;}
   
-  V1_bf = V1;
-  V2_bf = V2;
-  V3_bf = V3;
   current_time = ros::Time::now();
   
   double dt = (current_time - last_time).toSec();
