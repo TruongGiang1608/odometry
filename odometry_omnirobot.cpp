@@ -38,8 +38,8 @@ int main(int argc, char **argv)
   ros::Subscriber vel_sub = n.subscribe("wheels_speed",1000,velCallback);
   
   ros::Subscriber vel1_sub_ref = n.subscribe("/robot_kist/joint_1_velocity/command",1000,velCallback1);
-  ros::Subscriber vel2_sub_ref = n.subscribe("/robot_kist/joint_1_velocity/command",1000,velCallback2);
-  ros::Subscriber vel3_sub_ref = n.subscribe("/robot_kist/joint_1_velocity/command",1000,velCallback3);
+  ros::Subscriber vel2_sub_ref = n.subscribe("/robot_kist/joint_2_velocity/command",1000,velCallback2);
+  ros::Subscriber vel3_sub_ref = n.subscribe("/robot_kist/joint_3_velocity/command",1000,velCallback3);
 
   const double PI = acos(-1.0);
   const double R = 0.0625;
