@@ -4,26 +4,28 @@
 #include <nav_msgs/Odometry.h>
 #include <std_msgs/Float64.h>
 #include <sensor_msgs/JointState.h>
+#include <std_msgs/Float64MultiArray.h>
 #include <math.h>
 #include <sstream>
 
+double V1, V2, V3;
 double V1_rd, V2_rd, V3_rd;
-void velCallback(const std_msgs/Float64MultiArray& msg)
+void velCallback(const std_msgs::Float64MultiArray& msg)
 {
   V1_rd = msg.data[1];
   V2_rd = msg.data[0];
   V3_rd = msg.data[2];
 }
 double V1_ref, V2_ref, V3_ref;
-void velCallback1(const std_msgs/Float64& msg1)
+void velCallback1(const std_msgs::Float64& msg1)
 {
   V1_ref = msg1.data;
 }
-void velCallback2(const std_msgs/Float64& msg2)
+void velCallback2(const std_msgs::Float64& msg2)
 {
   V2_ref = msg2.data;
 }
-void velCallback3(const std_msgs/Float64& msg3)
+void velCallback3(const std_msgs::Float64& msg3)
 {
   V3_ref = msg3.data;
 }
@@ -56,17 +58,17 @@ int main(int argc, char **argv)
 while(n.ok())
 {
   ros::spinOnce();
-  if fabs(V1_rd - V1_ref) <= 0.01
+  if (fabs(V1_rd - V1_ref) <= 0.01)
     {
     V1 = V1_ref;
     }
   else {V1 = V1_rd;}
-  if fabs(V2_rd - V2_ref) <= 0.01
+  if (fabs(V2_rd - V2_ref) <= 0.01)
     {
     V2 = V2_ref;
     }
   else {V2 = V2_rd;}
-  if fabs(V3_rd - V3_ref) <= 0.01
+  if (fabs(V3_rd - V3_ref) <= 0.01)
     {
     V3 = V3_ref;
     }
@@ -88,7 +90,7 @@ while(n.ok())
   geometry_msgs::TransformStamped odom_trans;
   odom_trans.header.stamp = current_time;
   odom_trans.header.frame_id = "odom";
-  odom_trans.child_frame_id = "base_footprint"
+  odom_trans.child_frame_id = "base_footprint";
   
   odom_trans.transform.translation.x = x;
   odom_trans.transform.translation.y = y;
