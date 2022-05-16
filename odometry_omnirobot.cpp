@@ -8,10 +8,10 @@
 #include <sstream>
 
 double V1_rd, V2_rd, V3_rd;
-void velCallback(const std_msgs/Float64MultiArray& msg1)
+void velCallback(const std_msgs/Float64MultiArray& msg)
 {
-  V1_rd = msg.data[0];
-  V2_rd = msg.data[1];
+  V1_rd = msg.data[1];
+  V2_rd = msg.data[0];
   V3_rd = msg.data[2];
 }
 double V1_ref, V2_ref, V3_ref;
