@@ -37,9 +37,9 @@ int main(int argc, char **argv)
   tf::TransformBroadcaster odom_broadcaster;
   ros::Subscriber vel_sub = n.subscribe("wheels_speed",1000,velCallback);
   
-  ros::Subscriber vel1_sub_ref = n.subscribe(" ",1000,velCallback1);
-  ros::Subscriber vel2_sub_ref = n.subscribe(" ",1000,velCallback2);
-  ros::Subscriber vel3_sub_ref = n.subscribe(" ",1000,velCallback3);
+  ros::Subscriber vel1_sub_ref = n.subscribe("/robot_kist/joint_1_velocity/command",1000,velCallback1);
+  ros::Subscriber vel2_sub_ref = n.subscribe("/robot_kist/joint_1_velocity/command",1000,velCallback2);
+  ros::Subscriber vel3_sub_ref = n.subscribe("/robot_kist/joint_1_velocity/command",1000,velCallback3);
 
   const double PI = acos(-1.0);
   const double R = 0.0625;
@@ -58,17 +58,17 @@ int main(int argc, char **argv)
 while(n.ok())
 {
   ros::spinOnce();
-  if (fabs(V1_rd - V1_ref) <= 0.01)
+  if (fabs(V1_rd - V1_ref) <= 0.001)
     {
     V1 = V1_ref;
     }
   else {V1 = V1_rd;}
-  if (fabs(V2_rd - V2_ref) <= 0.01)
+  if (fabs(V2_rd - V2_ref) <= 0.001)
     {
     V2 = V2_ref;
     }
   else {V2 = V2_rd;}
-  if (fabs(V3_rd - V3_ref) <= 0.01)
+  if (fabs(V3_rd - V3_ref) <= 0.001)
     {
     V3 = V3_ref;
     }
