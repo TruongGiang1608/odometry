@@ -1,1 +1,25 @@
+#include <ros/ros.h>
+#include <geometry_msgs/Twist.h>
+#include <sensor_msgs/Joy.h>
+
+#class TeleopOmni
+{
+public:
+  TeleopOmni();
+
+private:
+  void joyCallback(const sensor_msgs::Joy::ConstPtr& joy);
+  
+  ros::NodeHandle nh;
+  
+  int linear, angular;
+  double l_scale, a_scale;
+  
+  ros::Publisher vel_pub;
+  ros::Subscriber joy_sub;
+};
+
+TeleopOmni::TeleopOmni();
+  linear = 1;
+  angular = 2;
 
