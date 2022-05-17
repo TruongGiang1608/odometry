@@ -82,9 +82,9 @@ while(n.ok())
   double w = (V1 + V2 + V3)/(3*L);
   
     
-  double x = x + V_x*dt;
-  double y = y + V_y*dt;
-  double phi = phi + w*dt;
+  x = x + V_x*dt;
+  y = y + V_y*dt;
+  phi = phi + w*dt;
   geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(phi);
   
   geometry_msgs::TransformStamped odom_trans;
