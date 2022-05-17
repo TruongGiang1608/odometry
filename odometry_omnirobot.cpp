@@ -77,8 +77,8 @@ while(n.ok())
   current_time = ros::Time::now();
   
   double dt = (current_time - last_time).toSec();
-  double V_x = -(2/3)*V1*sin(phi) + (sin(phi)-sqrt(3)*cos(phi))*V2/3 + (sin(phi)+sqrt(3)*cos(phi))*V3/3;
-  double V_y = (2/3)*V1*cos(phi) - (sqrt(3)*sin(phi)+cos(phi))*V2/3 + (sqrt(3)*sin(phi)-cos(phi))*V3/3;
+  double V_x = -2*V1*sin(phi)/3 + (sin(phi)-sqrt(3)*cos(phi))*V2/3 + (sin(phi)+sqrt(3)*cos(phi))*V3/3;
+  double V_y = 2*V1*cos(phi)/3 - (sqrt(3)*sin(phi)+cos(phi))*V2/3 + (sqrt(3)*sin(phi)-cos(phi))*V3/3;
   double w = (V1 + V2 + V3)/(3*L);
   
     
