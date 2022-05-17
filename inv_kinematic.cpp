@@ -29,9 +29,12 @@ while(n.ok())
   ros::spinOnce();
   ros::Time current_time;
   current_time = ros::Time::now();
+  // Tinh van toc dai 3 banh theo van co robot trong he toa do gan voi robot
+  double v1 = w*L + v_y;
+  double v2 = w*L - v_x*sin(PI/3) - v_y*cos(PI/3);
+  double v3 = w*L + v_x*sin(PI/3) - v_y*cos(PI/3);
   
   std_msgs::Float64MultiArray v_wheels_cmd;
-  
   v_wheels_cmd.data[0] = v1;
   v_wheels_cmd.data[1] = v2;
   v_wheels_cmd.data[2] = v3;
