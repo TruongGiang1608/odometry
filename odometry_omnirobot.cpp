@@ -4,6 +4,8 @@
 #include <nav_msgs/Odometry.h>
 #include <std_msgs/Float64.h>
 #include <sensor_msgs/JointState.h>
+#include <geometry_msgs/Quaternion.h>
+#include <geometry_msgs/TransformStamped.h>
 #include <std_msgs/Float64MultiArray.h>
 #include <math.h>
 #include <sstream>
